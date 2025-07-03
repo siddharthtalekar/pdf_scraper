@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+langchain
+langchain-google-genai
+qdrant-client
+google-generativeai
+pypdf
+jinja2
+python-multipart
