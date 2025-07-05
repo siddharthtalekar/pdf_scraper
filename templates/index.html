@@ -6,12 +6,16 @@
     <style>
         :root {
             --primary-color: #4361ee;
-            --secondary-color: #3f37c9;
+            --secondary-color: #3a0ca3;
             --accent-color: #4cc9f0;
             --light-color: #f8f9fa;
             --dark-color: #212529;
             --success-color: #4bb543;
             --error-color: #f44336;
+            --chat-bg: #f5f7fb;
+            --user-bubble: #4361ee;
+            --bot-bubble: #ffffff;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
         
         * {
@@ -25,114 +29,143 @@
             line-height: 1.6;
             color: var(--dark-color);
             background-color: #f0f2f5;
-            padding: 0;
-            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
         
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 1rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
         }
         
-        .card {
+        .header {
+            text-align: center;
+            margin-bottom: 1rem;
+            padding: 1rem;
             background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 2rem;
-            margin-bottom: 2rem;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            margin-top: 1rem;
         }
         
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-        
-        h2 {
+        .header h1 {
             color: var(--primary-color);
-            margin-bottom: 1.5rem;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 0.5rem;
         }
         
-        .form-group {
-            margin-bottom: 1.5rem;
+        .header p {
+            color: #666;
+            font-size: 1rem;
         }
         
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: white;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+        
+        .chat-header {
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .chat-header i {
+            font-size: 1.2rem;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            background: var(--chat-bg);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .message {
+            max-width: 80%;
+            padding: 0.75rem 1rem;
+            border-radius: 18px;
+            line-height: 1.4;
+            position: relative;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .user-message {
+            align-self: flex-end;
+            background: var(--user-bubble);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+        
+        .bot-message {
+            align-self: flex-start;
+            background: var(--bot-bubble);
             color: var(--dark-color);
+            box-shadow: var(--shadow);
+            border-bottom-left-radius: 4px;
         }
         
-        input[type="text"],
-        input[type="file"] {
-            width: 100%;
+        .message-time {
+            font-size: 0.7rem;
+            opacity: 0.7;
+            margin-top: 0.3rem;
+            text-align: right;
+        }
+        
+        .input-area {
+            padding: 1rem;
+            background: white;
+            border-top: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .input-row {
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        input[type="text"] {
+            flex: 1;
             padding: 0.75rem 1rem;
             border: 1px solid #ddd;
-            border-radius: 8px;
+            border-radius: 24px;
             font-size: 1rem;
-            transition: border-color 0.3s;
+            transition: all 0.3s;
         }
         
-        input[type="text"]:focus,
-        input[type="file"]:focus {
+        input[type="text"]:focus {
             outline: none;
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
-        }
-        
-        .file-input-container {
-            position: relative;
-            overflow: hidden;
-            display: inline-block;
-            width: 100%;
-        }
-        
-        .file-input-button {
-            border: 2px dashed #ccc;
-            border-radius: 8px;
-            padding: 2rem 1rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            width: 100%;
-        }
-        
-        .file-input-button:hover {
-            border-color: var(--primary-color);
-            background-color: rgba(67, 97, 238, 0.05);
-        }
-        
-        .file-input-button i {
-            font-size: 2rem;
-            color: var(--primary-color);
-            margin-bottom: 0.5rem;
-        }
-        
-        .file-input-button p {
-            margin: 0;
-            color: #666;
-        }
-        
-        .file-input {
-            position: absolute;
-            left: 0;
-            top: 0;
-            opacity: 0;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
-        }
-        
-        .selected-file {
-            margin-top: 0.5rem;
-            font-size: 0.9rem;
-            color: #666;
         }
         
         .btn {
@@ -140,15 +173,16 @@
             color: white;
             border: none;
             padding: 0.75rem 1.5rem;
-            border-radius: 8px;
+            border-radius: 24px;
             font-size: 1rem;
             font-weight: 500;
             cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
+            transition: all 0.3s;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
+            white-space: nowrap;
         }
         
         .btn:hover {
@@ -164,82 +198,183 @@
             background-color: #ccc;
             cursor: not-allowed;
             transform: none;
+            opacity: 0.7;
         }
         
-        .answer-container {
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-top: 1rem;
-            border-left: 4px solid var(--primary-color);
+        .file-input-container {
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            width: 100%;
         }
         
-        .answer-container p {
+        .file-input-button {
+            flex: 1;
+            border: 2px dashed #ccc;
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: rgba(67, 97, 238, 0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100px;
+        }
+        
+        .file-input-button:hover {
+            border-color: var(--primary-color);
+            background-color: rgba(67, 97, 238, 0.1);
+        }
+        
+        .file-input-button i {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .file-input-button p {
             margin: 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .file-input {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        
+        .selected-file {
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background: rgba(67, 97, 238, 0.05);
+            border-radius: 8px;
+        }
+        
+        .selected-file i {
+            color: var(--primary-color);
+        }
+        
+        .status-message {
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .success {
+            background-color: rgba(75, 181, 67, 0.1);
+            color: var(--success-color);
+        }
+        
+        .error {
+            background-color: rgba(244, 67, 54, 0.1);
+            color: var(--error-color);
         }
         
         .loader {
             display: inline-block;
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             border: 3px solid rgba(255, 255, 255, 0.3);
             border-radius: 50%;
             border-top-color: white;
             animation: spin 1s ease-in-out infinite;
         }
         
+        .bot-loader {
+            width: 12px;
+            height: 12px;
+            border-width: 2px;
+            border-top-color: var(--primary-color);
+            display: inline-block;
+            margin-left: 0.5rem;
+        }
+        
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
         
-        .status-message {
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
             padding: 0.75rem 1rem;
-            border-radius: 8px;
-            margin-top: 1rem;
-            font-weight: 500;
+            background: var(--bot-bubble);
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+            align-self: flex-start;
+            margin-bottom: 1rem;
         }
         
-        .success {
-            background-color: rgba(75, 181, 67, 0.1);
-            color: var(--success-color);
-            border-left: 4px solid var(--success-color);
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #aaa;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out;
         }
         
-        .error {
-            background-color: rgba(244, 67, 54, 0.1);
-            color: var(--error-color);
-            border-left: 4px solid var(--error-color);
+        .typing-dot:nth-child(1) {
+            animation-delay: 0s;
         }
         
-        .divider {
-            height: 1px;
-            background-color: #eee;
-            margin: 2rem 0;
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
         }
         
-        .header {
-            text-align: center;
-            margin-bottom: 2rem;
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
         }
         
-        .header h1 {
-            color: var(--primary-color);
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .header p {
-            color: #666;
-            font-size: 1.1rem;
+        @keyframes bounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-5px); }
         }
         
         @media (max-width: 768px) {
             .container {
+                padding: 0.5rem;
+            }
+            
+            .header {
+                padding: 0.75rem;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .chat-messages {
                 padding: 1rem;
             }
             
-            .card {
-                padding: 1.5rem;
+            .message {
+                max-width: 90%;
+            }
+            
+            .input-row {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                padding: 0.75rem;
             }
         }
     </style>
@@ -247,163 +382,240 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>PDF Q&A Assistant</h1>
-            <p>Upload your PDF documents and get instant answers to your questions</p>
+            <h1><i class="fas fa-robot"></i> PDF Q&A Assistant</h1>
+            <p>Upload your PDF documents and chat with them like a conversation</p>
         </div>
         
-        <div class="card">
-            <h2><i class="fas fa-file-upload"></i> Upload PDF Document</h2>
-            <form id="uploadForm">
-                <div class="form-group">
-                    <div class="file-input-container">
-                        <label class="file-input-button" for="fileInput">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                            <p>Click to browse or drag & drop your PDF file</p>
-                        </label>
-                        <input type="file" name="file" id="fileInput" class="file-input" accept=".pdf" required>
-                    </div>
-                    <div id="selectedFile" class="selected-file"></div>
+        <div class="chat-container">
+            <div class="chat-header">
+                <i class="fas fa-file-pdf"></i>
+                <span>PDF Document Chat</span>
+            </div>
+            
+            <div class="chat-messages" id="chatMessages">
+                <!-- Initial bot message -->
+                <div class="message bot-message">
+                    Hello! I'm your PDF assistant. Please upload a PDF document to get started, then ask me anything about its content.
+                    <div class="message-time">Just now</div>
                 </div>
-                <button type="submit" class="btn" id="uploadBtn">
-                    <span id="uploadBtnText">Upload</span>
-                    <span id="uploadLoader" class="loader" style="display: none;"></span>
-                </button>
+            </div>
+            
+            <div class="input-area">
+                <!-- File upload section -->
+                <div class="file-input-container">
+                    <label class="file-input-button" for="fileInput">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Click to upload PDF or drag & drop</p>
+                        <input type="file" name="file" id="fileInput" class="file-input" accept=".pdf">
+                    </label>
+                </div>
+                <div id="selectedFile" class="selected-file" style="display: none;">
+                    <i class="fas fa-file-pdf"></i>
+                    <span id="fileName"></span>
+                </div>
+                
                 <div id="uploadStatus" class="status-message" style="display: none;"></div>
-            </form>
-        </div>
-        
-        <div class="divider"></div>
-        
-        <div class="card">
-            <h2><i class="fas fa-question-circle"></i> Ask Your Question</h2>
-            <form id="askForm">
-                <div class="form-group">
-                    <label for="questionInput">What would you like to know?</label>
-                    <input type="text" name="question" id="questionInput" placeholder="Enter your question here..." required>
+                
+                <!-- Question input section -->
+                <div class="input-row">
+                    <input type="text" name="question" id="questionInput" placeholder="Ask a question about the PDF..." disabled>
+                    <button type="button" class="btn" id="askBtn" disabled>
+                        <span id="askBtnText">Ask</span>
+                        <span id="askLoader" class="loader" style="display: none;"></span>
+                    </button>
                 </div>
-                <button type="submit" class="btn" id="askBtn">
-                    <span id="askBtnText">Ask Question</span>
-                    <span id="askLoader" class="loader" style="display: none;"></span>
-                </button>
-                <div class="answer-container" id="answerContainer" style="display: none;">
-                    <p><strong>Answer:</strong> <span id="answerOutput"></span></p>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 
     <script>
+        // DOM elements
+        const chatMessages = document.getElementById('chatMessages');
+        const fileInput = document.getElementById('fileInput');
+        const selectedFileDiv = document.getElementById('selectedFile');
+        const fileNameSpan = document.getElementById('fileName');
+        const uploadStatus = document.getElementById('uploadStatus');
+        const questionInput = document.getElementById('questionInput');
+        const askBtn = document.getElementById('askBtn');
+        const askBtnText = document.getElementById('askBtnText');
+        const askLoader = document.getElementById('askLoader');
+        
         // Handle file selection display
-        document.getElementById('fileInput').addEventListener('change', function(e) {
-            const fileInput = document.getElementById('fileInput');
-            const selectedFileDiv = document.getElementById('selectedFile');
-            
+        fileInput.addEventListener('change', function(e) {
             if (fileInput.files.length > 0) {
-                selectedFileDiv.innerHTML = `<i class="fas fa-file-pdf"></i> Selected file: <strong>${fileInput.files[0].name}</strong> (${(fileInput.files[0].size / 1024 / 1024).toFixed(2)} MB)`;
+                const file = fileInput.files[0];
+                fileNameSpan.textContent = `${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+                selectedFileDiv.style.display = 'flex';
+                
+                // Add user message about file upload
+                addMessage(`I've uploaded a PDF file: ${file.name}`, 'user');
+                
+                // Enable question input
+                questionInput.disabled = false;
+                askBtn.disabled = false;
             } else {
-                selectedFileDiv.innerHTML = '';
+                selectedFileDiv.style.display = 'none';
+                questionInput.disabled = true;
+                askBtn.disabled = true;
             }
         });
-
-        // Handle PDF upload
-        document.getElementById('uploadForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
+        
+        // Handle PDF upload when file is selected
+        fileInput.addEventListener('change', async function(e) {
+            if (!fileInput.files.length) return;
             
-            const fileInput = document.getElementById('fileInput');
-            const uploadBtn = document.getElementById('uploadBtn');
-            const uploadBtnText = document.getElementById('uploadBtnText');
-            const uploadLoader = document.getElementById('uploadLoader');
-            const uploadStatus = document.getElementById('uploadStatus');
+            // Show uploading status
+            uploadStatus.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading and processing PDF...';
+            uploadStatus.className = 'status-message';
+            uploadStatus.style.display = 'flex';
             
-            if (!fileInput.files.length) {
-                uploadStatus.innerText = 'Please select a file first';
-                uploadStatus.className = 'status-message error';
-                uploadStatus.style.display = 'block';
-                return;
-            }
-            
-            // Show loading state
-            uploadBtn.disabled = true;
-            uploadBtnText.innerText = 'Uploading...';
-            uploadLoader.style.display = 'inline-block';
-            uploadStatus.style.display = 'none';
+            // Show typing indicator
+            const typingIndicator = showTypingIndicator();
             
             try {
                 const formData = new FormData();
                 formData.append('file', fileInput.files[0]);
-
+                
                 const response = await fetch('/upload/', {
                     method: 'POST',
                     body: formData
                 });
-
+                
                 const result = await response.json();
                 
-                uploadStatus.innerText = result.message || "File uploaded successfully!";
-                uploadStatus.className = 'status-message success';
-                uploadStatus.style.display = 'block';
+                // Remove typing indicator
+                removeTypingIndicator(typingIndicator);
                 
+                if (response.ok) {
+                    uploadStatus.innerHTML = '<i class="fas fa-check-circle"></i> PDF uploaded successfully! You can now ask questions.';
+                    uploadStatus.className = 'status-message success';
+                    
+                    // Add bot confirmation message
+                    addMessage(`I've successfully processed "${fileInput.files[0].name}". You can now ask me questions about this document.`, 'bot');
+                } else {
+                    uploadStatus.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${result.message || 'Error processing PDF'}`;
+                    uploadStatus.className = 'status-message error';
+                    
+                    // Add bot error message
+                    addMessage("Sorry, I couldn't process that PDF file. Please try another file.", 'bot');
+                    
+                    // Reset file input
+                    fileInput.value = '';
+                    selectedFileDiv.style.display = 'none';
+                    questionInput.disabled = true;
+                    askBtn.disabled = true;
+                }
             } catch (error) {
-                uploadStatus.innerText = 'Error uploading file. Please try again.';
+                removeTypingIndicator(typingIndicator);
+                uploadStatus.innerHTML = '<i class="fas fa-exclamation-circle"></i> Error uploading file. Please try again.';
                 uploadStatus.className = 'status-message error';
-                uploadStatus.style.display = 'block';
+                
+                // Add bot error message
+                addMessage("Sorry, I encountered an error while processing your file. Please try again.", 'bot');
+                
                 console.error('Upload error:', error);
-            } finally {
-                // Reset button state
-                uploadBtn.disabled = false;
-                uploadBtnText.innerText = 'Upload';
-                uploadLoader.style.display = 'none';
             }
         });
-
-        // Handle question ask
-        document.getElementById('askForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            const question = document.getElementById('questionInput').value.trim();
-            const askBtn = document.getElementById('askBtn');
-            const askBtnText = document.getElementById('askBtnText');
-            const askLoader = document.getElementById('askLoader');
-            const answerContainer = document.getElementById('answerContainer');
-            const answerOutput = document.getElementById('answerOutput');
+        
+        // Handle question submission
+        askBtn.addEventListener('click', async function() {
+            const question = questionInput.value.trim();
             
             if (!question) {
-                answerContainer.style.display = 'block';
-                answerOutput.innerText = "Please enter a question first.";
+                addMessage("Please enter a question first.", 'bot');
                 return;
             }
             
-            // Show loading state
+            // Add user message to chat
+            addMessage(question, 'user');
+            
+            // Clear input
+            questionInput.value = '';
+            
+            // Show typing indicator
+            const typingIndicator = showTypingIndicator();
+            
+            // Disable input while processing
+            questionInput.disabled = true;
             askBtn.disabled = true;
-            askBtnText.innerText = 'Processing...';
-            askLoader.style.display = 'inline-block';
-            answerContainer.style.display = 'none';
             
             try {
                 const formData = new FormData();
                 formData.append('question', question);
-
+                
                 const response = await fetch('/ask/', {
                     method: 'POST',
                     body: formData
                 });
-
+                
                 const result = await response.json();
                 
-                answerOutput.innerText = result.answer || "No answer found for this question.";
-                answerContainer.style.display = 'block';
+                // Remove typing indicator
+                removeTypingIndicator(typingIndicator);
                 
+                if (response.ok) {
+                    // Add bot response to chat
+                    addMessage(result.answer || "I couldn't find an answer to that question in the document.", 'bot');
+                } else {
+                    addMessage("Sorry, I encountered an error while processing your question. Please try again.", 'bot');
+                }
             } catch (error) {
-                answerOutput.innerText = "Error processing your question. Please try again.";
-                answerContainer.style.display = 'block';
+                removeTypingIndicator(typingIndicator);
+                addMessage("Sorry, I couldn't process your question right now. Please try again later.", 'bot');
                 console.error('Ask error:', error);
             } finally {
-                // Reset button state
+                // Re-enable input
+                questionInput.disabled = false;
                 askBtn.disabled = false;
-                askBtnText.innerText = 'Ask Question';
-                askLoader.style.display = 'none';
+                questionInput.focus();
             }
         });
+        
+        // Allow pressing Enter to submit question
+        questionInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                askBtn.click();
+            }
+        });
+        
+        // Helper function to add a message to the chat
+        function addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}-message`;
+            messageDiv.innerHTML = `
+                ${text}
+                <div class="message-time">${formatTime(new Date())}</div>
+            `;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // Helper function to show typing indicator
+        function showTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'typing-indicator';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = `
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            `;
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            return typingDiv;
+        }
+        
+        // Helper function to remove typing indicator
+        function removeTypingIndicator(typingElement) {
+            if (typingElement && typingElement.parentNode) {
+                typingElement.parentNode.removeChild(typingElement);
+            }
+        }
+        
+        // Helper function to format time
+        function formatTime(date) {
+            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
     </script>
 </body>
 </html>

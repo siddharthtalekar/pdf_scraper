@@ -12,7 +12,7 @@ embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
 
 def embed_and_store(text: str, source: str):
     docs = [Document(page_content=text, metadata={"source": source})]
-
+ 
 
     Qdrant.from_documents(
         documents=docs,
@@ -20,4 +20,4 @@ def embed_and_store(text: str, source: str):
         collection_name=COLLECTION_NAME,
         location="http://localhost:6333"
     )
-  
+
